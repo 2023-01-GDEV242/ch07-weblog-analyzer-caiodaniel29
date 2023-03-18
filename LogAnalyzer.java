@@ -24,6 +24,15 @@ public class LogAnalyzer
     }
 
     /**
+     * 
+     * @param fileName the name of the file
+     */
+    public LogAnalyzer(String fileName) {
+        hourCounts = new int[24];
+        reader = new LogfileReader(fileName);
+    }
+    
+    /**
      * Analyze the hourly access data from the log file.
      */
     public void analyzeHourlyData()
@@ -54,5 +63,55 @@ public class LogAnalyzer
     public void printData()
     {
         reader.printData();
+    }
+    
+    /**
+     * Number of accesses in the log file
+     */
+    public int numberOfAccesses() {
+        int total = 0;
+            for(int numAccesses : hourCounts) {
+                total += numAccesses;
+            }
+        return total;
+    }
+    
+    public int busiestHour() {
+        int busiestHour = 0;
+        int maxCount = 0;
+
+        for(int i = 0; i < hourCounts.length; i++) {
+            if(hourCounts[i] > maxCount) {
+                busiestHour = i;
+                maxCount = hourCounts[i];
+            }
+        }
+        return busiestHour;
+    }
+    
+    public int quietestHour() {
+        int quietestHour = 0;
+        int minCount = 0;
+        
+        for(int i = 0; i < hourCounts.length; i++) {
+            if(hourCounts[i] < minCount) {
+                quietestHour = i;
+                minCount = hourCounts[i];
+            }
+        }
+        return quietestHour;
+    }
+    
+    public int busiestTwoHour() {
+        int busiestTwoHour = 0;
+        int maxCount = 0;
+        
+        for(int i = 0; i < hourCounts.length / 2; i++) {
+            int busiestCounts = hourCounts[i * 2] + hourCounts[i * 2 + 1];
+            if(busiestCounts > maxCount) {
+                busiestTwoHour = i;
+            }
+        }
+        return busiestTwoHour;
     }
 }
